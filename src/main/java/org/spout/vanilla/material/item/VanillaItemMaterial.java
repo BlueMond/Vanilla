@@ -72,29 +72,4 @@ public class VanillaItemMaterial extends Material implements VanillaMaterial {
 		this.meleeDamage = damage;
 		return this;
 	}
-
-	@Override
-	public boolean isColliding() {
-		return false;  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public Object getUserData() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public CollisionShape getCollisionShape() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public Vector3f getCollisionOffset() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public boolean isBlocking() {
-		return false;  //To change body of implemented methods use File | Settings | File Templates.
-	}
 }
