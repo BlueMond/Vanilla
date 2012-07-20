@@ -26,6 +26,10 @@
  */
 package org.spout.vanilla.material.item;
 
+import javax.vecmath.Vector3f;
+
+import com.bulletphysics.collision.shapes.CollisionShape;
+
 import org.spout.api.material.Material;
 
 import org.spout.vanilla.material.VanillaMaterial;
@@ -67,5 +71,30 @@ public class VanillaItemMaterial extends Material implements VanillaMaterial {
 	public VanillaItemMaterial setDamage(int damage) {
 		this.meleeDamage = damage;
 		return this;
+	}
+
+	@Override
+	public boolean isColliding() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Object getUserData() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public CollisionShape getCollisionShape() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Vector3f getCollisionOffset() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public boolean isBlocking() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 }

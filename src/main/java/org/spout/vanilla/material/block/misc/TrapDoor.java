@@ -52,7 +52,6 @@ public class TrapDoor extends AbstractAttachable implements Fuel, Mineable, Open
 	public TrapDoor(String name, int id) {
 		super(name, id);
 		this.setAttachable(BlockFaces.NESW).setHardness(3.0F).setResistance(5.0F).setTransparent();
-		this.setCollision(CollisionStrategy.SOLID);
 	}
 
 	@Override

@@ -168,7 +168,7 @@ public final class PlayerBlockPlacementMessageHandler extends MessageHandler<Pla
 				//is the player not solid-colliding with the block?
 				if (toPlace instanceof BlockMaterial) {
 					BlockMaterial mat = (BlockMaterial) toPlace;
-					if (mat.isSolid()) {
+					if (mat.getCollisionShape() != null) {
 						//TODO: Implement collision models to make this work
 						//CollisionModel playerModel = player.getEntity().getCollision();
 						//Vector3 offset = playerModel.resolve(mat.getCollisionModel());

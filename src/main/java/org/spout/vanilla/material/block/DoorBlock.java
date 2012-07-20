@@ -44,7 +44,6 @@ import org.spout.vanilla.util.VanillaPlayerUtil;
 public abstract class DoorBlock extends GroundAttachable implements Mineable, Openable, RedstoneTarget {
 	public DoorBlock(String name, int id) {
 		super(name, id);
-		this.setCollision(CollisionStrategy.SOLID);
 	}
 
 	@Override

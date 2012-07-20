@@ -51,16 +51,16 @@ public class PrimedTnt extends Substance {
 	@Override
 	public void onTick(float dt) {
 		super.onTick(dt);
-		// gravity
-		this.setVelocity(this.getVelocity().subtract(0, 0.04, 0));
-		this.move();
-		// slow-down
-		this.setVelocity(this.getVelocity().multiply(0.98));
-
-		//TODO: proper entity on ground function
-		if (getParent().getWorld().getBlock(getParent().getPosition(), getParent()).translate(BlockFace.BOTTOM).getMaterial().isSolid()) {
-			this.setVelocity(this.getVelocity().multiply(0.7, -0.5, 0.7));
-		}
+//		// gravity
+//		this.setVelocity(this.getVelocity().subtract(0, 0.04, 0));
+//		this.move();
+//		// slow-down
+//		this.setVelocity(this.getVelocity().multiply(0.98));
+//
+//		//TODO: proper entity on ground function
+//		if (getParent().getWorld().getBlock(getParent().getPosition(), getParent()).translate(BlockFace.BOTTOM).getMaterial().isSolid()) {
+//			this.setVelocity(this.getVelocity().multiply(0.7, -0.5, 0.7));
+//		}
 
 		timeToExplode -= dt;
 		if (timeToExplode <= 0.0f) {

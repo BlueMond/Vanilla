@@ -75,7 +75,7 @@ public class PondObject extends RandomObject {
 				for (byte py = 1; py < 5; py++) {
 					if (isWallBlock(px, py, pz, holeHeightMap)) {
 						final BlockMaterial material = world.getBlockMaterial(x + px, y - py, z + pz);
-						if (!material.isSolid() && material != liquid) {
+						if (material.getCollisionShape() != null && material != liquid) {
 							return false;
 						}
 					}

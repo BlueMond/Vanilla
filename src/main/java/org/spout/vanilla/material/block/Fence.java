@@ -38,7 +38,6 @@ import org.spout.vanilla.material.block.misc.Torch;
 public abstract class Fence extends VanillaBlockMaterial implements Mineable {
 	public Fence(String name, int id) {
 		super(name, id);
-		this.setCollision(CollisionStrategy.SOLID);
 	}
 
 	@Override

@@ -94,17 +94,17 @@ public class Item extends Substance {
 	public void onTick(float dt) {
 		super.onTick(dt);
 
-		// gravity
-		this.setVelocity(this.getVelocity().subtract(0, 0.04, 0));
-		this.move();
-		// slow-down
-		this.setVelocity(this.getVelocity().multiply(0.98));
-
-		//TODO: proper entity on ground function
-		Block below = getParent().getWorld().getBlock(getParent().getPosition().subtract(0.0, 0.2, 0.0), getParent());
-		if (below.getMaterial().isSolid()) {
-			this.setVelocity(this.getVelocity().multiply(0.7, 0.0, 0.7).add(0.0, 0.06, 0.0));
-		}
+//		// gravity
+//		this.setVelocity(this.getVelocity().subtract(0, 0.04, 0));
+//		this.move();
+//		// slow-down
+//		this.setVelocity(this.getVelocity().multiply(0.98));
+//
+//		//TODO: proper entity on ground function
+//		Block below = getParent().getWorld().getBlock(getParent().getPosition().subtract(0.0, 0.2, 0.0), getParent());
+//		if (below.getMaterial().isSolid()) {
+//			this.setVelocity(this.getVelocity().multiply(0.7, 0.0, 0.7).add(0.0, 0.06, 0.0));
+//		}
 
 		//TODO: Block friction / burn damage / etc.
 
