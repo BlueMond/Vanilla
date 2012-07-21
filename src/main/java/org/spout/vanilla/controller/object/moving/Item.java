@@ -75,7 +75,6 @@ public class Item extends Substance {
 	@Override
 	public void onAttached() {
 		super.onAttached();
-		getParent().getCollision().setStrategy(CollisionStrategy.SOFT);
 		if (data().containsKey(Data.HELD_ITEM)) {
 			is = data().get(Data.HELD_ITEM).clone();
 		}

@@ -78,7 +78,6 @@ public class Human extends Living {
 	@Override
 	public void onAttached() {
 		super.onAttached();
-		getParent().setCollision(new CollisionModel(new BoundingBox(1, 2, 1, 2, 2, 1))); //TODO Absolutely guessed here.
 		setMaxHealth(20);
 		setHealth(20, HealthChangeReason.SPAWN);
 		getParent().setObserver(true);

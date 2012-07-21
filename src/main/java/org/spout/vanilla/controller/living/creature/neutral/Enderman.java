@@ -58,7 +58,6 @@ public class Enderman extends Creature implements Neutral {
 			heldItem = data().get(Data.HELD_ITEM);
 		}
 		super.onAttached();
-		getParent().setCollision(new CollisionModel(new BoundingBox(1, 3, 1, 2, 3, 1)));
 	}
 
 	@Override
