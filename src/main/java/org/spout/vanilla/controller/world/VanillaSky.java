@@ -84,7 +84,6 @@ public abstract class VanillaSky extends Controller implements VanillaController
 
 	@Override
 	public void onAttached() {
-		getParent().setCollision(null);
 		synchronized (skies) {
 			skies.put(getWorld(), this);
 		}

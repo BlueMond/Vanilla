@@ -94,8 +94,6 @@ public abstract class VanillaActionController extends Controller implements Vani
 
 	@Override
 	public void onAttached() {
-		getParent().setCollision(new CollisionModel(area));
-		getParent().getCollision().setStrategy(CollisionStrategy.SOLID);
 		data().put(VanillaData.CONTROLLER_TYPE, getType().getMinecraftId());
 		this.lastClientTransform = getParent().getTransform();
 
