@@ -36,6 +36,7 @@ import org.spout.api.util.BlockIterator;
 
 import org.spout.vanilla.material.VanillaMaterials;
 import org.spout.vanilla.material.block.plant.Sapling;
+import org.spout.vanilla.util.VanillaMathHelper;
 
 public class BigTreeObject extends TreeObject {
 	private float trunkHeightMultiplier = 0.618f;
@@ -92,7 +93,8 @@ public class BigTreeObject extends TreeObject {
 	}
 
 	private List<PointBase> getLeafGroupPoints(World world, int x, int y, int z) {
-		byte groupsPerLayer = (byte) (1.382 + Math.pow(leafAmount * totalHeight / 13, 2));
+		final float amount = leafAmount * totalHeight / 13;
+		byte groupsPerLayer = (byte) (1.382 + amount * amount);
 
 		if (groupsPerLayer == 0) {
 			groupsPerLayer = 1;
@@ -115,13 +117,15 @@ public class BigTreeObject extends TreeObject {
 			for (byte count = 0; count < groupsPerLayer; count++) {
 				final float randomAngle = (float) (Math.PI * 2f * random.nextFloat());
 				final float scale = widthScale * layerSize * (random.nextFloat() + 0.328f);
-				final int groupX = (int) (scale * Math.sin(randomAngle) + x + 0.5);
-				final int groupZ = (int) (scale * Math.cos(randomAngle) + z + 0.5);
+				final int groupX = (int) (scale * VanillaMathHelper.sin(randomAngle) + x + 0.5);
+				final int groupZ = (int) (scale * VanillaMathHelper.cos(randomAngle) + z + 0.5);
 				final Point group = new Point(world, groupX, groupY, groupZ);
 				if (getAvailableBlockSpace(group, group.add(0, leafDistanceLimit, 0)) != -1) {
 					continue;
 				}
-				final float horizontalDistanceToTrunk = (float) Math.sqrt(Math.pow(x - groupX, 2) + Math.pow(z - groupZ, 2));
+				final byte xOff = (byte) (x - groupX);
+				final byte zOff = (byte) (z - groupZ);
+				final float horizontalDistanceToTrunk = (float) Math.sqrt(xOff * xOff + zOff * zOff);
 				final float verticalDistanceToTrunk = horizontalDistanceToTrunk * branchSlope;
 				final int base;
 				final int yDiff = (int) (groupY - verticalDistanceToTrunk);
@@ -149,9 +153,9 @@ public class BigTreeObject extends TreeObject {
 	private void generateGroupLayer(World world, int x, int y, int z, byte size) {
 		for (int xx = x - size; xx <= x + size; xx++) {
 			for (int zz = z - size; zz <= z + size; zz++) {
-				final float disk = (float) Math.sqrt(Math.pow(Math.abs(x - xx) + 0.5, 2)
-						+ Math.pow(Math.abs(z - zz) + 0.5, 2));
-				if (disk <= size) {
+				final float sizeX = Math.abs(x - xx) + 0.5f;
+				final float sizeZ = Math.abs(z - zz) + 0.5f;
+				if (sizeX * sizeX + sizeZ * sizeZ <= size * size) {
 					if (overridable.contains(world.getBlockMaterial(xx, y, zz))) {
 						world.setBlockMaterial(xx, y, zz, VanillaMaterials.LEAVES, leavesMetadata, world);
 					}
@@ -161,14 +165,15 @@ public class BigTreeObject extends TreeObject {
 	}
 
 	private float getRoughLayerSize(byte layer) {
+		final float halfHeight = totalHeight / 2f;
 		if (layer < totalHeight / 3f) {
 			return -1f;
-		} else if (layer == totalHeight / 2f) {
-			return totalHeight / 4f;
+		} else if (layer == halfHeight) {
+			return halfHeight / 4;
 		} else if (layer >= totalHeight || layer <= 0) {
 			return 0;
 		} else {
-			return (float) Math.sqrt(Math.pow(totalHeight / 2, 2) - Math.pow(layer - totalHeight / 2, 2)) / 2;
+			return (float) Math.sqrt(halfHeight * halfHeight - (layer - halfHeight) * (layer - halfHeight)) / 2;
 		}
 	}
 

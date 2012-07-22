@@ -24,27 +24,42 @@
  * License and see <http://www.spout.org/SpoutDevLicenseV1.txt> for the full license,
  * including the MIT license.
  */
-package org.spout.vanilla.world.generator.normal.biome.basic;
+package org.spout.vanilla.window;
 
-import org.spout.vanilla.world.generator.normal.biome.GrassyBiome;
-import org.spout.vanilla.world.generator.normal.decorator.FlowerDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.MushroomDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.PumpkinDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.SandAndClayDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.SugarCaneDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.TallGrassDecorator;
-import org.spout.vanilla.world.generator.normal.decorator.TreeDecorator;
-
-public class SmallMountainsBiome extends GrassyBiome {
-	public SmallMountainsBiome(int biomeId) {
-		super(biomeId, new SandAndClayDecorator(), new TreeDecorator(new NormalTreeWGOFactory()),
-				new FlowerDecorator(), new TallGrassDecorator(new NormalTallGrassFactory()),
-				new MushroomDecorator(), new SugarCaneDecorator(), new PumpkinDecorator());
-		setMinMax((byte) 67, (byte) 95);
+/**
+ * Stores information of a Window item click event
+ */
+public class ClickArgs {
+	private final boolean rightClick, shift;
+	public ClickArgs(boolean rightClick, boolean shift) {
+		this.rightClick = rightClick;
+		this.shift = shift;
 	}
 
-	@Override
-	public String getName() {
-		return "Small Mountains";
+	/**
+	 * Gets whether it was a right mouse click
+	 * 
+	 * @return True if it was a right click, False if not
+	 */
+	public boolean isRightClick() {
+		return this.rightClick;
+	}
+
+	/**
+	 * Gets whether it was a left mouse click
+	 * 
+	 * @return True if it was a left click, False if not
+	 */
+	public boolean isLeftClick() {
+		return !this.rightClick;
+	}
+
+	/**
+	 * Gets whether shift was down while clicking
+	 * 
+	 * @return True if shift was down, False if not
+	 */
+	public boolean isShiftDown() {
+		return this.shift;
 	}
 }

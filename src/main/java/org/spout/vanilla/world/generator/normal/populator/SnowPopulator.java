@@ -42,7 +42,7 @@ import org.spout.vanilla.world.generator.normal.object.SnowObject;
 
 public class SnowPopulator extends Populator {
 	private static final Perlin SNOW_HEIGHT= new Perlin();
-
+	
 	static {
 		SNOW_HEIGHT.setFrequency(0.2D);
 		SNOW_HEIGHT.setLacunarity(1D);
@@ -50,11 +50,10 @@ public class SnowPopulator extends Populator {
 		SNOW_HEIGHT.setPersistence(0.7D);
 		SNOW_HEIGHT.setOctaveCount(1);
 	}
-
+	
 	@Override
 	public void populate(Chunk chunk, Random random) {
 		SnowObject snowObject = new SnowObject(random);
-
 		final int seed = (int) chunk.getWorld().getSeed();
 		SNOW_HEIGHT.setSeed(seed);
 		
@@ -64,7 +63,6 @@ public class SnowPopulator extends Populator {
 		final World world = chunk.getWorld();
 		final int x = chunk.getBlockX();
 		final int z = chunk.getBlockZ();
-
 		for (byte xx = 0; xx < 16; xx++) {
 			for (byte zz = 0; zz < 16; zz++) {
 				final Block block = world.getBlock(x + xx, world.getHeight() - 1, z + zz, world);
@@ -74,7 +72,7 @@ public class SnowPopulator extends Populator {
 						continue;
 					}
 				}
-
+				
 				int count = (int) ((SNOW_HEIGHT.GetValue(x + xx + 0.001, 0.123, z + zz + 0.1) + 1.0) * 4.0);
 				for (int i = 0; i < count; i++) {
 					snowObject.placeObject(world, x + xx, 0, z + zz);

@@ -34,11 +34,13 @@ import org.spout.vanilla.window.TransactionWindow;
 import org.spout.vanilla.window.WindowType;
 
 public class EnchantmentTableWindow extends TransactionWindow {
-	private static final SlotIndexMap SLOTS = new SlotIndexMap("28-36, 19-27, 10-18, 1-9, 0");
+	private static final SlotIndexMap MAIN_SLOTS = new SlotIndexMap("28-36, 19-27, 10-18, 1-9");
+	private static final SlotIndexMap ENCHANT_SLOTS = new SlotIndexMap("0");
 
 	public EnchantmentTableWindow(VanillaPlayer owner, EnchantmentTable table) {
 		super(WindowType.ENCHANTMENTTABLE, "Enchant", owner, table);
-		this.setSlotIndexMap(SLOTS);
+		this.addInventory(owner.getInventory().getMain(), MAIN_SLOTS);
+		this.addInventory(table.getInventory(), ENCHANT_SLOTS);
 	}
 
 	/**

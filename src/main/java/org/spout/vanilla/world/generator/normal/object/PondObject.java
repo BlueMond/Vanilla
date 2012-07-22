@@ -36,6 +36,7 @@ import org.spout.api.material.BlockMaterial;
 import org.spout.vanilla.material.VanillaMaterials;
 import org.spout.vanilla.material.block.Liquid;
 import org.spout.vanilla.world.generator.normal.biome.GrassyBiome;
+import org.spout.vanilla.world.generator.normal.biome.SandyBiome;
 import org.spout.vanilla.world.generator.normal.biome.SnowyBiome;
 import org.spout.vanilla.world.generator.object.RandomObject;
 
@@ -94,10 +95,14 @@ public class PondObject extends RandomObject {
 	public void placeObject(World world, int x, int y, int z) {
 		x -= 8;
 		z -= 8;
+		Biome biome = world.getBiomeType(x, y, z);
+		boolean sandy = biome instanceof SandyBiome;
 		for (byte px = 0; px < 16; px++) {
 			for (byte pz = 0; pz < 16; pz++) {
+				boolean columnHasWater = false;
 				for (byte py = (byte) -holeHeightMap[16 * px + pz]; py < 0; py++) {
 					world.setBlockMaterial(px + x, py + y, pz + z, liquid, (short) 0, world);
+					columnHasWater = true;
 				}
 				if (stoneWalls) {
 					for (byte py = 1; py < 5; py++) {
@@ -117,6 +122,12 @@ public class PondObject extends RandomObject {
 								block.setMaterial(VanillaMaterials.STONE);
 							}
 						}
+					}
+				}
+				if (sandy && columnHasWater) {
+					int ty = topHeightMap[16 * px + pz] + y;
+					if (world.getBlockMaterial(x + px, ty, z + pz).equals(VanillaMaterials.SAND)) {
+						world.setBlockMaterial(x + px, ty, z + pz, VanillaMaterials.SANDSTONE, (short) 0, world);
 					}
 				}
 			}
@@ -160,6 +171,11 @@ public class PondObject extends RandomObject {
 		for (byte px = 0; px < 16; px++) {
 			for (byte pz = 0; pz < 16; pz++) {
 				holeHeightMap[16 * px + pz] = pond.getDepth(px, pz);
+			}
+		}
+		pond.randomize();
+		for (byte px = 0; px < 16; px++) {
+			for (byte pz = 0; pz < 16; pz++) {
 				topHeightMap[16 * px + pz] = pond.getDepth(px, pz);
 			}
 		}
@@ -213,15 +229,19 @@ public class PondObject extends RandomObject {
 
 		private PondHole() {
 			noise = new SphericalNoise[random.nextInt(4) + 4];
+			randomize();
+		}
+		
+		private void randomize() {
 			for (byte i = 0; i < noise.length; i++) {
-				noise[i] = new SphericalNoise();
+				noise[i] = new SphericalNoise(random.nextLong());
 			}
 		}
 
 		private byte getDepth(int x, int z) {
-			byte depth = Byte.MIN_VALUE;
+			byte depth = 0;
 			for (final SphericalNoise n : noise) {
-				byte d = n.getValue(x, z);
+				final byte d = (byte) n.getValue(x, z);
 				depth = d > depth ? d : depth;
 			}
 			return depth;
@@ -231,36 +251,28 @@ public class PondObject extends RandomObject {
 		 * Noise used to generate the pond hole
 		 */
 		private class SphericalNoise {
-			private final float radius;
-			private final int xOffset;
-			private final int yOffset;
-			private final int zOffset;
-			private final float xMultiplier;
-			private final float yMultiplier;
-			private final float zMultiplier;
+			private final Random random = new Random();
+			private final float xOffset;
+			private final float yOffset;
+			private final float zOffset;
+			private final float xScale;
+			private final float yScale;
+			private final float zScale;
 
-			private SphericalNoise() {
-				int yOff = random.nextInt(2);
-				if (random.nextBoolean()) {
-					yOff = -yOff;
-				}
-				yOffset = yOff;
-				xOffset = random.nextInt(7) + 4;
-				zOffset = random.nextInt(7) + 4;
-				radius = random.nextInt(2) + 2;
-				xMultiplier = random.nextFloat() * 0.2f + 0.95f;
-				yMultiplier = random.nextFloat() + 0.9f;
-				zMultiplier = random.nextFloat() * 0.2f + 0.95f;
+			private SphericalNoise(long seed) {
+				random.setSeed(seed);
+				xScale = random.nextFloat() * 6 + 3;
+				yScale = random.nextFloat() * 4 + 2;
+				zScale = random.nextFloat() * 6 + 3;
+				xOffset = random.nextFloat() * (16 - xScale - 2) + 1 + xScale / 2;
+				yOffset = random.nextFloat() * (8 - yScale - 4) + 2 + yScale / 2;
+				zOffset = random.nextFloat() * (16 - zScale - 2) + 1 + zScale / 2;
 			}
 
-			private byte getValue(int x, int z) {
-				final float xOffNoise = random.nextFloat() * 0.2f;
-				final float zOffNoise = random.nextFloat() * 0.2f;
-				final float radiusNoise = random.nextFloat() * 0.8f;
-				final float multiXNoise = 1f - random.nextFloat() * 0.1f;
-				final float multiZNoise = 1f - random.nextFloat() * 0.1f;
-				final float value = (float) Math.sqrt(Math.pow(radius + radiusNoise, 2) - Math.pow((xMultiplier * multiXNoise) * x - xOffset - xOffNoise, 2) - Math.pow((zMultiplier * multiZNoise) * z - zOffset - zOffNoise, 2));
-				return (byte) ((value + yOffset) / yMultiplier);
+			private float getValue(int x, int z) {
+				final float sizeX = (x - xOffset) / (xScale / 2);
+				final float sizeZ = (z - zOffset) / (zScale / 2);
+				return (float) (Math.sqrt(1 - sizeX * sizeX - sizeZ * sizeZ) * (yScale / 2) + yOffset) / 2;
 			}
 		}
 	}
